@@ -86,9 +86,9 @@
 					</ul>
 		        </div>
 
-					  	@empty
-					    <p class="text-muted">No Comments Available!</p>
-					    @endforelse
+			  	@empty
+			    <p class="text-muted">No Comments Available!</p>
+			    @endforelse
 					
 	  	</div>
 	</div>	

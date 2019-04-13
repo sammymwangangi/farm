@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class, 'user_id');
     }
+
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class, 'user_id');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Farmer;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Delivery extends Model
@@ -17,4 +18,5 @@ class Delivery extends Model
     {
         return $this->belongsTo(Farmer::class, 'farmer_no');
     }
+
 }

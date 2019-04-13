@@ -32,10 +32,9 @@ class DashboardController extends Controller
 
     public function comments()
     {
-        $comments = Comment::all();
+        $comments = Comment::where('user_id', Auth::id())->get();
         $farmer = Farmer::all();
-        $user = Auth::user();
-        return view('dashboard.comments', ['comments' => $comments, 'farmer' => $farmer, 'user' => $user]);
+        return view('dashboard.comments', ['comments' => $comments, 'farmer' => $farmer,]);
     }
 
     public function addcomment(Request $request)
@@ -46,37 +45,23 @@ class DashboardController extends Controller
             'audio' => 'mimetypes:audio/mp4,audio/mpeg,audio/ogg',
         ]);
 
-        try {
-            $comment = Comment::create(array_merge($request->all()));
-            if ($request->hasFile('audio')) {
-                $file = $request->file('audio');
-                $fileName = time() . '.' . $file->getClientOriginalExtension();
-                $request->audio->move('comments', $fileName);
-                $comment->update(['audio' => $fileName]);
-            }
-            dd($request->all());
-            return redirect('dashboard/comments')->with('success', 'comment has been created!');
-        } catch (\Exception $e) {
-            return redirect('dashboard/comments')->with('error', 'An error occured during creating the comment!');
+        if($request->hasFile('audio')) {
+            $filenameWithExt = $request->file('audio')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('audio')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('audio')->move(public_path('comments'), $fileNameToStore);
         }
+        // Create Comment
+        $comment = new Comment;
+        $comment->title = $request->input('title');
+        $comment->body = $request->input('body');
+        $comment->audio = $request->input('audio');
+        $comment->user_id = auth()->user()->id;
+        $comment->audio = $fileNameToStore;
+        $comment->save();
 
-        // if($request->hasFile('audio')) {
-        //     $filenameWithExt = $request->file('audio')->getClientOriginalName();
-        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //     $extension = $request->file('audio')->getClientOriginalExtension();
-        //     $fileNameToStore = $filename.'_'.time().'.'.$extension;
-        //     $path = $request->file('audio')->move(public_path('comments'), $fileNameToStore);
-        // }
-        // // Create Comment
-        // $comment = new Comment;
-        // $comment->title = $request->input('title');
-        // $comment->body = $request->input('body');
-        // $comment->audio = $request->input('audio');
-        // $comment->user_id = auth()->user()->id;
-        // $comment->audio = $fileNameToStore;
-        // $comment->save();
-
-        // return redirect()->back()->with('success', 'Comment added successfully!');
+        return redirect()->back()->with('success', 'Comment added successfully!');
     }
 
     public function adduser(Request $request)

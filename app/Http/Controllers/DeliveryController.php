@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Delivery;
 use App\Farmer;
 use App\Settings\Settings;
@@ -19,10 +20,10 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries = Delivery::all();
+        $deliveries = Delivery::where('farmer_no', Auth::id())->get();
         $farmers = Farmer::all();
         $setting = Settings::first();
-        return view('deliveries.index', compact('deliveries', 'farmers', 'setting'));
+        return view('deliveries.index', compact('deliveries', 'farmers', 'setting',));
     }
 
     /**

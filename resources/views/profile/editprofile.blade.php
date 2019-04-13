@@ -41,7 +41,7 @@
                             <div class="col-md-6">
                             <div class="form-group">
                                 <label  for="form-username">Profile Photo</label>
-                                <input type="file" name="avatar" value="{{ $user->avatar }}" class="form-username form-control" >
+                                <input type="file" name="avatar" value="{{ $user->avatar }}" class="form-username form-control-file" >
                             </div>
                         </div>
                         </div>
