@@ -70,8 +70,9 @@
 		          <hr>
 		          <br>
 		        @endrole
-	          	<table class="table table-bordered table-condensed table-hover">
+	          	<table id="users_table" class="table table-bordered table-condensed table-hover">
 				  	<caption>List of users</caption>
+
 				  	<thead>
 					    <tr>
 					       <th scope="col">#</th>
@@ -95,6 +96,14 @@
 					    @empty
 					    <p class="text-muted">No Deliveries Available!</p>
 					    @endforelse
+					    <div class="row m-3 p-3 font-weight-bold">
+					    	<div class="col-sm-4">
+					    		TOTAL LITRES: {{$total}}
+					    	</div>
+					    	<div class="col-sm-4">
+					    		TOTAL SALES: {{ ($total) * ($setting->price) }}
+					    	</div>
+					    </div>
 				  	</tbody>
 				</table>
 

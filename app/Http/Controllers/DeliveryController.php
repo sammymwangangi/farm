@@ -20,10 +20,18 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries = Delivery::where('farmer_no', Auth::id())->get();
+        $deliveries = Delivery::all();
+        $total = DB::table('deliveries')->sum('litres');
+        // $sales = DB::table('deliveries')->sum('litres');
+        // $user->posts()->where('active', 1)->get();
+        // $deliveries = DB::table('deliveries')
+        //     ->join('farmers', 'deliveries.id', '=', 'farmers.user_id')
+        //     ->join('farmer_no', 'deliveries.id', '=', 'farmer_no.user_id')
+        //     ->select('deliveries.*', 'farmers.phone', 'orders.price')
+        //     ->get();
         $farmers = Farmer::all();
         $setting = Settings::first();
-        return view('deliveries.index', compact('deliveries', 'farmers', 'setting',));
+        return view('deliveries.index', compact('deliveries', 'farmers', 'setting', 'total', 'sales'));
     }
 
     /**
